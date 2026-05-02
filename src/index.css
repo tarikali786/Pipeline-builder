@@ -1,0 +1,356 @@
+/* ========================================
+   VectorShift Pipeline Builder - Styles
+   ======================================== */
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: #0f172a;
+  color: #e2e8f0;
+}
+
+/* ---- Toolbar ---- */
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 12px 20px;
+  background: #1e293b;
+  border-bottom: 1px solid #334155;
+}
+
+.toolbar__brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.toolbar__logo {
+  font-size: 22px;
+  color: #818cf8;
+}
+
+.toolbar__title {
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+  color: #f1f5f9;
+}
+
+.toolbar__nodes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* ---- Draggable Node (toolbar chips) ---- */
+.draggable-node {
+  cursor: grab;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  user-select: none;
+}
+
+.draggable-node:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--drag-color, #6366f1);
+  box-shadow: 0 0 16px rgba(99, 102, 241, 0.2);
+  transform: translateY(-2px) scale(1.05);
+}
+
+.draggable-node.dragging {
+  transform: scale(0.85);
+  opacity: 0.4;
+  box-shadow: 0 0 24px var(--drag-color, #6366f1);
+  border-color: var(--drag-color, #6366f1);
+}
+
+.draggable-node__icon {
+  font-size: 16px;
+  color: var(--drag-color, #6366f1);
+}
+
+.draggable-node__label {
+  font-size: 13px;
+  font-weight: 500;
+  color: #cbd5e1;
+}
+
+/* ---- Pipeline Canvas ---- */
+.pipeline-canvas {
+  width: 100vw;
+  height: calc(100vh - 110px);
+  background: #0f172a;
+}
+
+.pipeline-canvas .react-flow__edge-path {
+  stroke: #6366f1;
+  stroke-width: 2;
+}
+
+.pipeline-canvas .react-flow__connection-line {
+  stroke: #818cf8;
+}
+
+.pipeline-controls button {
+  background: #1e293b !important;
+  border-color: #334155 !important;
+  color: #e2e8f0 !important;
+  fill: #e2e8f0 !important;
+}
+
+.pipeline-controls button:hover {
+  background: #334155 !important;
+}
+
+/* ---- Base Node ---- */
+@keyframes nodeDropIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.08);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.base-node {
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+  overflow: visible;
+  font-size: 13px;
+  transition: box-shadow 0.25s ease, border-color 0.25s ease;
+  animation: nodeDropIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+.base-node:hover {
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5),
+    0 0 0 1px var(--node-color, #6366f1);
+  border-color: var(--node-color, #6366f1);
+}
+
+.base-node__header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: var(--node-color, #6366f1);
+  border-radius: 11px 11px 0 0;
+  color: #fff;
+  font-weight: 600;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.base-node__icon {
+  font-size: 14px;
+}
+
+.base-node__body {
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.base-node__field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.base-node__field-row {
+  display: flex;
+  gap: 8px;
+}
+
+.base-node__label {
+  font-size: 11px;
+  font-weight: 600;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.base-node__input,
+.base-node__select,
+.base-node__textarea {
+  padding: 6px 10px;
+  border: 1px solid #334155;
+  border-radius: 6px;
+  background: #0f172a;
+  color: #e2e8f0;
+  font-size: 13px;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.15s ease;
+  width: 100%;
+}
+
+.base-node__input:focus,
+.base-node__select:focus,
+.base-node__textarea:focus {
+  border-color: var(--node-color, #6366f1);
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.15);
+}
+
+.base-node__textarea {
+  resize: none;
+  min-height: 32px;
+  overflow: hidden;
+  line-height: 1.5;
+}
+
+.base-node__select {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%2394a3b8' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  padding-right: 28px;
+}
+
+.base-node__description {
+  margin: 0;
+  font-size: 12px;
+  color: #94a3b8;
+  line-height: 1.5;
+}
+
+.base-node__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.base-node__tag {
+  display: inline-block;
+  padding: 2px 8px;
+  font-size: 11px;
+  font-weight: 500;
+  background: rgba(99, 102, 241, 0.15);
+  color: #818cf8;
+  border-radius: 4px;
+  font-family: 'SF Mono', 'Fira Code', monospace;
+}
+
+/* ---- Handles ---- */
+@keyframes handlePulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(129, 140, 248, 0.4); }
+  50% { box-shadow: 0 0 0 5px rgba(129, 140, 248, 0); }
+}
+
+.base-node__handle {
+  width: 12px !important;
+  height: 12px !important;
+  border: 2px solid #1e293b !important;
+  border-radius: 50% !important;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.base-node__handle--target {
+  background: #818cf8 !important;
+}
+
+.base-node__handle--source {
+  background: #34d399 !important;
+}
+
+.base-node__handle:hover {
+  transform: scale(1.5);
+  box-shadow: 0 0 12px rgba(99, 102, 241, 0.6);
+  animation: handlePulse 1.5s ease-in-out infinite;
+}
+
+.base-node__handle-label {
+  position: absolute;
+  font-size: 10px;
+  color: #64748b;
+  white-space: nowrap;
+  pointer-events: none;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.base-node__handle-label--left {
+  left: 16px;
+}
+
+.base-node__handle-label--right {
+  right: 16px;
+}
+
+/* ---- Submit Bar ---- */
+.submit-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 20px;
+  background: #1e293b;
+}
+
+.submit-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 32px;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  letter-spacing: 0.3px;
+}
+
+.submit-btn:hover {
+  background: linear-gradient(135deg, #818cf8, #a78bfa);
+  box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
+  transform: translateY(-1px);
+}
+
+.submit-btn:active {
+  transform: translateY(0) scale(0.97);
+}
+
+/* ---- Edge Animation ---- */
+.pipeline-canvas .react-flow__edge-path {
+  stroke-dasharray: 5;
+  animation: edgeFlow 0.5s linear infinite;
+}
+
+@keyframes edgeFlow {
+  to { stroke-dashoffset: -10; }
+}
+
+/* ---- Connection Line Animation ---- */
+.pipeline-canvas .react-flow__connection-line {
+  stroke-dasharray: 6;
+  animation: edgeFlow 0.3s linear infinite;
+}
