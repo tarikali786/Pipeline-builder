@@ -65,7 +65,6 @@ const TEMPLATES = [
 export const PipelineToolbar = () => {
   const {
     toolbarFilter,
-    setToolbarFilter,
     undo,
     redo,
     deleteSelected,
@@ -84,7 +83,6 @@ export const PipelineToolbar = () => {
   } = useStore(
     (s) => ({
       toolbarFilter: s.toolbarFilter,
-      setToolbarFilter: s.setToolbarFilter,
       undo: s.undo,
       redo: s.redo,
       deleteSelected: s.deleteSelected,
