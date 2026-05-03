@@ -9,29 +9,39 @@ const selector = (state) => ({
 export const SubmitButton = () => {
   const { nodes, edges } = useStore(selector, shallow);
 
-  const handleSubmit = async () => {
-    try {
-      const response = await fetch('http://localhost:8000/pipelines/parse', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ nodes, edges }),
+  const handleSubmit = () => {
+    const numNodes = nodes.length;
+    const numEdges = edges.length;
+
+    // Check if the graph is a DAG using topological sort (Kahn's algorithm)
+    const adj = {};
+    const inDegree = {};
+    nodes.forEach((n) => {
+      adj[n.id] = [];
+      inDegree[n.id] = 0;
+    });
+    edges.forEach((e) => {
+      if (adj[e.source]) adj[e.source].push(e.target);
+      inDegree[e.target] = (inDegree[e.target] || 0) + 1;
+    });
+    const queue = Object.keys(inDegree).filter((id) => inDegree[id] === 0);
+    let visited = 0;
+    while (queue.length > 0) {
+      const node = queue.shift();
+      visited++;
+      (adj[node] || []).forEach((neighbor) => {
+        inDegree[neighbor]--;
+        if (inDegree[neighbor] === 0) queue.push(neighbor);
       });
-
-      if (!response.ok) {
-        throw new Error(`Server responded with ${response.status}`);
-      }
-
-      const data = await response.json();
-
-      alert(
-        `Pipeline Analysis\n\n` +
-        `Nodes: ${data.num_nodes}\n` +
-        `Edges: ${data.num_edges}\n` +
-        `Is DAG: ${data.is_dag ? 'Yes' : 'No'}`
-      );
-    } catch (err) {
-      alert(`Error submitting pipeline: ${err.message}`);
     }
+    const isDag = visited === numNodes;
+
+    alert(
+      `Pipeline Analysis\n\n` +
+      `Nodes: ${numNodes}\n` +
+      `Edges: ${numEdges}\n` +
+      `Is DAG: ${isDag ? 'Yes' : 'No'}`
+    );
   };
 
   return (
