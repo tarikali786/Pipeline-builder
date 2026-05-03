@@ -1,20 +1,7 @@
 import { useState } from "react";
-import { DraggableNode } from "./draggableNode";
 import { SubmitButton } from "./submit";
 import { useStore } from "./store";
 import { shallow } from "zustand/shallow";
-
-const ALL_NODES = [
-  { type: "customInput", label: "Input", icon: "\u2197", color: "#10b981" },
-  { type: "llm", label: "LLM", icon: "\u2699", color: "#8b5cf6" },
-  { type: "customOutput", label: "Output", icon: "\u2196", color: "#f59e0b" },
-  { type: "text", label: "Text", icon: "\u270E", color: "#3b82f6" },
-  { type: "api", label: "API Call", icon: "\u21B9", color: "#ec4899" },
-  { type: "filter", label: "Filter", icon: "\u2637", color: "#14b8a6" },
-  { type: "merge", label: "Merge", icon: "\u2216", color: "#f97316" },
-  { type: "timer", label: "Timer", icon: "\u23F2", color: "#64748b" },
-  { type: "conditional", label: "Conditional", icon: "\u2696", color: "#ef4444" },
-];
 
 const TEMPLATES = [
   {
@@ -64,7 +51,6 @@ const TEMPLATES = [
 
 export const PipelineToolbar = () => {
   const {
-    toolbarFilter,
     undo,
     redo,
     deleteSelected,
@@ -82,7 +68,6 @@ export const PipelineToolbar = () => {
     toggleSnapToGrid,
   } = useStore(
     (s) => ({
-      toolbarFilter: s.toolbarFilter,
       undo: s.undo,
       redo: s.redo,
       deleteSelected: s.deleteSelected,
@@ -106,13 +91,6 @@ export const PipelineToolbar = () => {
   const [showLoadModal, setShowLoadModal] = useState(false);
   const [showTemplateModal, setShowTemplateModal] = useState(false);
   const [saveName, setSaveName] = useState("");
-
-  const filteredNodes = ALL_NODES.filter(
-    (n) =>
-      !toolbarFilter ||
-      n.label.toLowerCase().includes(toolbarFilter.toLowerCase()) ||
-      n.type.toLowerCase().includes(toolbarFilter.toLowerCase())
-  );
 
   const handleSave = () => {
     if (!saveName.trim()) return;
@@ -176,28 +154,18 @@ export const PipelineToolbar = () => {
   return (
     <>
       <div className="toolbar">
-        <div className="toolbar__brand">
+        <div className="toolbar__brand"> 
           <span className="toolbar__logo">&#9670;</span>
           <span className="toolbar__title">Pipeline Builder</span>
         </div>
 
-        {/* <div className="toolbar__search">
-          <input
-            className="toolbar__search-input"
-            type="text"
-            placeholder="Search nodes..."
-            value={toolbarFilter}
-            onChange={(e) => setToolbarFilter(e.target.value)}
-          />
-        </div> */}
-
-        <div className="toolbar__nodes">
-          {filteredNodes.map((n) => (
-            <DraggableNode key={n.type} type={n.type} label={n.label} icon={n.icon} color={n.color} />
-          ))}
-        </div>
-
         <div className="toolbar__actions">
+          <button
+            className="toolbar__btn toolbar__btn--new"
+            onClick={() => { if (window.confirm("Create a new pipeline? Unsaved changes will be lost.")) clearAll(); }}
+            title="New Pipeline"
+          >&#10010;</button>
+          <span className="toolbar__separator" />
           <button className="toolbar__btn" onClick={undo} title="Undo (Ctrl+Z)">&#8630;</button>
           <button className="toolbar__btn" onClick={redo} title="Redo (Ctrl+Y)">&#8631;</button>
           <span className="toolbar__separator" />
@@ -220,9 +188,13 @@ export const PipelineToolbar = () => {
             &#9638;
           </button>
           <button className="toolbar__btn toolbar__btn--danger" onClick={() => { if (window.confirm("Clear entire pipeline?")) clearAll(); }} title="Clear All">&#9888;</button>
+          
+          <span className="toolbar__separator" />
+          <SubmitButton />
+        
+        
         </div>
 
-        <SubmitButton />
       </div>
 
       {/* Save Modal */}
